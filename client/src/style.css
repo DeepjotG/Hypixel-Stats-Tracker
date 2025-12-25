@@ -1,1 +1,36 @@
 @import "tailwindcss";
+
+@font-face {
+    font-family: Minecraft;
+    src: url('./assets/fonts/Minecraft-s.p.9091ed40.ttf');
+    font-weight: 400;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: Minecraft;
+    src: url('./assets/fonts/Minecraft\ Bold-s.p.dc949fd9.ttf');
+    font-weight: 600;
+    font-display: swap;
+}
+
+
+@theme {
+    --font-minecraft: Minecraft, sans-serif;
+    --shadow-mc: color-mix(in srgb, currentColor 25%, #000 75%);
+    --fc: #A0A0A0; 
+}
+
+@layer utilities {
+    .text-mc-4 {
+      font-family: var(--font-minecraft);
+      font-size: 300px;
+      text-shadow: 7px 7px var(--shadow-mc);
+    }
+  
+    .text-mc-7 {
+      font-family: var(--font-minecraft);
+      font-size: 112px;
+      text-shadow: 7px 7px var(--shadow-mc);
+    }
+  }

@@ -8,10 +8,23 @@ const GetPlayerUUID = async (username) => {
                 'Content-Type': 'application/json',
             },
         });
+        
+        if (!response.ok) {
+            if (response.status === 404) {
+                throw new Error('Player not found');
+            }
+            throw new Error(`Mojang API error: ${response.status}`);
+        }
+        
         const data = await response.json();
+        
+        if (!data || !data.id) {
+            throw new Error('Invalid response from Mojang API');
+        }
+        
         return data;
     } catch (err) {
-        console.log(err.message);
+        throw new Error(`Failed to fetch player UUID: ${err.message}`);
     }
 }
 
