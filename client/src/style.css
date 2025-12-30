@@ -18,7 +18,7 @@
 @theme {
     --font-minecraft: Minecraft, sans-serif;
     --shadow-mc: color-mix(in srgb, currentColor 25%, #000 75%);
-    --fc: #A0A0A0; 
+    --color-fc: #303030; 
 }
 
 @layer utilities {

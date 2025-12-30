@@ -1,11 +1,16 @@
 import React from "react";
 import "./style.css";
 import Homepage from "./components/Homepage";
+import NavBar from "./components/NavBar";
+import { Routes, Route } from "react-router-dom";
 
 const App = () => {
   return (
     <>
-      <Homepage />
+      <NavBar />
+      <Routes>
+        <Route path="/" element={<Homepage />} />
+      </Routes>
     </>
   );
 };
