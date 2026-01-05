@@ -2,9 +2,8 @@ import express from 'express';
 import { authUser, requiredFields } from "../controllers/loginController.js"
 
 
-const authRoutes = express.Router();
+const router = express.Router();
 
-authRoutes.post("/", requiredFields, authUser);
+router.post("/", requiredFields, authUser);
 
-
-export { authRoutes };
+export { router as authRouter };

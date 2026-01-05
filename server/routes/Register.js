@@ -1,9 +1,8 @@
 import express from 'express';
 import { registerUser } from '../controllers/registerController.js';
 
-const registerRoute = express.Router();
+const router = express.Router();
 
-registerRoute.post("/", registerUser);
+router.post("/", registerUser);
 
-
-export { registerRoute };
+export { router as registerRouter };

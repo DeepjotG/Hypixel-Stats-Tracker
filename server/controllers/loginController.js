@@ -24,39 +24,48 @@ const authUser = async (req, res) => {
     try {
         const {username, password} = req.body;
 
-        await client.query("BEGIN");
-
-        const user = await client.query('SELECT * FROM users WHERE username = $1', [username]);
+        const user = await client.query(
+          "SELECT * FROM users WHERE username = $1",
+          [username]
+        );
         if (user.rows.length === 0) {
-            return res.status(401).json({ Error: 'User not found' });
-        } 
+          return res.status(401).json({ Error: "User not found" });
+        }
         const result = user.rows[0];
         const match = await bcrypt.compare(password, result.password);
 
-        if(match){
-            const accessToken = jwt.sign(
-                {"username": username, "admin": result.admin},
-                process.env.ACCESS_TOKEN_SECRET,
-                {expiresIn: '30s'}
-            );
-            const refreshToken = jwt.sign(
-                {"username": username, "admin": result.admin},
-                process.env.REFRESH_TOKEN_SECRET,
-                {expiresIn: '1d'}
-            );
-            const userUpdate = await client.query('UPDATE tokens SET access_token = $1, refresh_token = $2 WHERE user_id = $3', 
-                [accessToken, refreshToken, result.user_id]);
-            
-            if(userUpdate.rowCount === 0){
-                return res.status(401).json({ Error: 'User token not found' });
-            }
+        if (match) {
+          const accessToken = jwt.sign(
+            { username: username, admin: result.admin },
+            process.env.ACCESS_TOKEN_SECRET,
+            { expiresIn: "30s" }
+          );
+          const refreshToken = jwt.sign(
+            { username: username, admin: result.admin },
+            process.env.REFRESH_TOKEN_SECRET,
+            { expiresIn: "1d" }
+          );
 
-            await client.query("COMMIT");
-            res.cookie('jwt', refreshToken, {httpOnly: true, maxAge: 24 * 60 * 60 * 1000});
-            res.json({accessToken});
-            
+          await client.query("BEGIN");
+          const userUpdate = await client.query(
+            "UPDATE tokens SET access_token = $1, refresh_token = $2 WHERE user_id = $3",
+            [accessToken, refreshToken, result.user_id]
+          );
+
+          if (userUpdate.rowCount === 0) {
+            return res.status(401).json({ Error: "User token not updated" });
+          }
+
+          await client.query("COMMIT");
+          res.cookie("jwt", refreshToken, {
+            httpOnly: true,
+            sameSite: "None",
+            secure: true,
+            maxAge: 24 * 60 * 60 * 1000,
+          });
+          res.json({ accessToken });
         } else {
-            res.sendStatus(401);
+          res.sendStatus(401);
         }
     } catch (err) {
         await client.query("ROLLBACK");
