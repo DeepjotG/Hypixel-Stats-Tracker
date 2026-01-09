@@ -33,4 +33,25 @@
       font-size: 112px;
       text-shadow: 7px 7px var(--shadow-mc);
     }
+    
+    .offscreen{
+      position: absolute;
+      left: -9999px;
+    }
+
+    .hide {
+      display: none;
+    }
+
+    .valid {
+      color: limegreen;
+      margin-left: 0.25rem;
+    }
+
+    .invalid {
+      color: red;
+      margin-left: 0.25rem;
+    }
+
+
   }
